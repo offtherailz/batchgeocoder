@@ -13,9 +13,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 import au.com.bytecode.opencsv.CSVReader;
 
-public class CSVRepositoryReader implements LocationRepository {
+public class CSVRepositoryReader implements Input {
 	
 	private static Logger LOG = Logger.getLogger(CSVRepositoryReader.class.getCanonicalName());
 //	private static String STATE_SUFFIX = ", Italia";
@@ -29,8 +33,35 @@ public class CSVRepositoryReader implements LocationRepository {
 	public List<Location> getLocations() {
 		return locationList;
 	}
-
+	
 	public void loadLocations() {
+		Configuration conf = null;
+		try {
+			conf = new PropertiesConfiguration("configuration.properties");
+		} catch (ConfigurationException e) {
+			LOG.log(Level.SEVERE, "failed to load configurations");
+		}
+		int id = conf.getInt("index.id");
+		int value = conf.getInt("index.value");
+		Integer altValue = (!conf.getString("index.altValue").isEmpty())?conf.getInt("index.altValue"):null;
+		String basePath = conf.getString("basePath");
+		String fileName = conf.getString("fileNameIn");
+		
+		List<String[]> allData = new ArrayList<String[]>();
+		allData.addAll(buildList(id,value, altValue, basePath + fileName));
+		
+		for(String[] el : allData){
+			Location loc = new LocationImpl();
+			loc.setPosition(new Position());
+			Description tmpDesc = new Description();
+			tmpDesc.setDescription(el);
+			loc.setDescription(tmpDesc);
+			locationList.add(loc);
+		}
+		
+	}
+
+	public void loadLocationsZ() {
 //		Map<String, String[]> comuni = buildMap(2, 8, 9, FILE_PATH + "comuni_italiani_2012.csv");
 //		Map<String, String[]> province = buildMap(8, 10, null, FILE_PATH + "ripartizioni_regioni_province_2012.csv");
 //		Map<String, String[]> regioni = buildMap(0, 2, null, FILE_PATH + "regioni_2012.csv");

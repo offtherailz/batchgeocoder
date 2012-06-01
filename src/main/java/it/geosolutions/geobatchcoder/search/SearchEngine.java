@@ -7,52 +7,48 @@ import java.util.logging.Logger;
 import it.geosolutions.geobatchcoder.model.Location;
 import it.geosolutions.geobatchcoder.persistance.CSVRepositoryReader;
 import it.geosolutions.geobatchcoder.persistance.CSVRepositoryWriter;
-import it.geosolutions.geobatchcoder.persistance.LocationRepository;
+import it.geosolutions.geobatchcoder.persistance.Input;
 import it.geosolutions.geobatchcoder.persistance.Output;
+import it.geosolutions.geobatchcoder.persistance.OutputFileType;
 
 public class SearchEngine {
 
 	private static Logger LOG = Logger.getLogger(SearchEngine.class
 			.getCanonicalName());
 	
-	private LocationRepository repo;
+	private Input repo;
 	private Search searcher;
-	private Output out;
+	private Output listGeocoded;
+	private Output outDiscarded;
 	
 	public SearchEngine(){
-		//Inject from outside
 		repo = new CSVRepositoryReader();
 		searcher = new NominatimSearch();
-		out = new CSVRepositoryWriter();
+		listGeocoded = new CSVRepositoryWriter(OutputFileType.GEOCODED);
+		outDiscarded = new CSVRepositoryWriter(OutputFileType.DISCARDED);
 	}
 	
 	public void runSearch(){
-		List<Location> locations = new ArrayList<Location>();
+		List<Location> geocodedList = new ArrayList<Location>();
 		repo.loadLocations();
 		boolean outcome = false;
-		List<String> discardedList = new ArrayList<String>();
+		List<Location> discardedList = new ArrayList<Location>();
 		for(Location el : repo.getLocations()){
 			outcome = searcher.calculateGeoData(el);
-			locations.add(el);
 			if(!outcome){
-				discardedList.add(el.getName());
+				discardedList.add(el);
 				LOG.info("Discarded " + el.getName());
 			}
 			else{
-				LOG.info("geocoded " + el.getName());
+				geocodedList.add(el);
+				LOG.info("Geocoded " + el.getName());
 			}
 		}
-		out.storeLocations(locations);
-		for(String el : discardedList){
-			LOG.info("Discarded " + el);
-		}
+		listGeocoded.storeLocations(geocodedList);
+		outDiscarded.storeLocations(discardedList);
 		LOG.info("Discarded Number " + discardedList.size());
+		for(Location el : discardedList){
+			LOG.info("Discarded " + el.getName());
+		}
 	}
-	
-	public static void main (String[] args){
-		SearchEngine engine = new SearchEngine();
-		engine.runSearch();
-	}
-	
-	
 }

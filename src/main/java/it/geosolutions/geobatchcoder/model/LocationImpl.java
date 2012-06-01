@@ -2,6 +2,12 @@ package it.geosolutions.geobatchcoder.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.Polygon;
 
 public class LocationImpl implements Location{
 	
@@ -19,6 +25,12 @@ public class LocationImpl implements Location{
 		list.addAll(position.getPositionAsList());
 		return list;
 	}
+	
+	public void getJTSBoundingBox(){
+		
+		Polygon jtsPoly = buildJTSPolygon();
+//		jtsPoly.
+	}
 
 	public List<String> getPositionsAlternatives() {
 		return description.getAllAlternatives();
@@ -30,6 +42,27 @@ public class LocationImpl implements Location{
 	
 	public String getName(){
 		return this.description.getName();
+	}
+	
+	private Polygon buildJTSPolygon() {
+
+		Map<String, Double> bounds = position.getBoundingBoxPoints();
+		double lat = position.getLatitude();
+		double lon = position.getLongitude();
+		
+		Coordinate[] coords = new Coordinate[4];
+		coords[0] = new Coordinate(lon, lat - bounds.get("north"));
+		coords[1] = new Coordinate(lon, lat + bounds.get("south"));
+		coords[2] = new Coordinate(lon - bounds.get("weast"), lat);
+		coords[3] = new Coordinate(lon + bounds.get("east"), lat);
+		
+		GeometryFactory geometryFactory = new GeometryFactory();
+		
+		LinearRing ring = geometryFactory.createLinearRing(coords);
+		LinearRing holes[] = null; // use LinearRing[] to represent holes
+		Polygon polygon = geometryFactory.createPolygon(ring, holes);
+		return polygon;
+
 	}
 
 //	public Description getDescription() {

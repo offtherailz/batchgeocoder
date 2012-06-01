@@ -1,14 +1,19 @@
 package it.geosolutions.geobatchcoder.persistance;
 
+import it.geosolutions.geobatchcoder.composer.OutputComposer;
+import it.geosolutions.geobatchcoder.composer.PlainComposerOut;
 import it.geosolutions.geobatchcoder.model.Location;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -16,26 +21,36 @@ import com.geosolutions.batchgeocoder.Canvas;
 
 public class CSVRepositoryWriter implements Output {
 
-	private static String OUTPUT = "src/main/resources/output.csv";
 	private static Logger LOG = Logger.getLogger(Canvas.class.getCanonicalName());
+	private OutputComposer outComposer;
+	private String outputFileName;
 	
-	public CSVRepositoryWriter(){
-		
+	public CSVRepositoryWriter(OutputFileType type){
+		outComposer = new PlainComposerOut();
+		Configuration conf = null;
+		try {
+			conf = new PropertiesConfiguration("configuration.properties");
+		} catch (ConfigurationException e) {
+			LOG.log(Level.SEVERE, "failed to load configurations");
+		}
+		switch (type) {
+		case GEOCODED: 
+			outputFileName = conf.getString("fileNameOut.geocoded");
+			break;
+		case DISCARDED: 
+			outputFileName = conf.getString("fileNameOut.discarded");
+			break;
+		}
 	}
 	
 	public void storeLocations(List<Location> locations) {
 		Writer writer = null;
 		CSVWriter csvWriter = null;
 		try {
-			writer = new FileWriter(OUTPUT);
+			writer = new FileWriter(outputFileName);
 		
 		csvWriter = new CSVWriter(writer, ';');
-		writeHeader(csvWriter);
-		List<String[]> strList = new ArrayList<String[]>();
-		for(Location el : locations){
-			String[] arr = new String[el.getLocationAsList().size()];
-			strList.add(el.getLocationAsList().toArray(arr));
-		}
+		List<String[]> strList = outComposer.composeAll(locations);;
 		csvWriter.writeAll(strList);
 		} 
 		catch (IOException e) {
@@ -62,16 +77,6 @@ public class CSVRepositoryWriter implements Output {
 		
 	}
 
-	private void writeHeader(CSVWriter csvWriter){
-		String [] header = new String[7];
-		header[0] = "NAME";
-		header[1] = "LATITUDE";
-		header[2] = "LONGITUDE";
-		header[3] = "NORTH";
-		header[4] = "SOUTH";
-		header[5] = "EAST";
-		header[6] = "WEST";
-		csvWriter.writeNext(header);
-	}
+	
 
 }
