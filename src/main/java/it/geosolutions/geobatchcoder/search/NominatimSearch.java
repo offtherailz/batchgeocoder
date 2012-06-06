@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -24,9 +26,9 @@ public class NominatimSearch extends Search {
 //	private NominatimSearch searcher;
 	private static String STATE_SUFFIX = ", Italia";
 	
-	public NominatimSearch(){
+	public NominatimSearch(String email){
 		HttpClient httpClient = new DefaultHttpClient();
-		client = new JsonNominatimClient(httpClient, "");
+		client = new JsonNominatimClient(httpClient, email);
 	}
 	
 	@Override
@@ -35,6 +37,7 @@ public class NominatimSearch extends Search {
 		List<Address> result = null;
 		for(String el : location.getPositionsAlternatives()){
 			result = new ArrayList<Address>();
+//			client.
 			try {
 				result = client.search(el + STATE_SUFFIX);
 				if (result.size() > 0) {
@@ -45,6 +48,7 @@ public class NominatimSearch extends Search {
 				}
 			} catch (IOException e) {
 				LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				JOptionPane.showConfirmDialog(null, "Nominatim ti ha rifiutato a " + el);
 			}
 		}
 		Position pos = new Position();
