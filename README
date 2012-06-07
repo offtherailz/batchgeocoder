@@ -1,0 +1,4 @@
+BATCHGEOCODER - a simple client for bulk geocoding/reverse geocoding
+
+clone repo, run mvn eclipse:eclipse, open the maven project into eclipse, run start.java
+In sources directory are present csv file from ISTAT with all italian region, province and town.
