@@ -1,9 +1,10 @@
-package it.geosolutions.geobatchcoder.persistance;
+package it.geosolutions.batchgeocoder.io;
 
-import it.geosolutions.geobatchcoder.composer.OutputComposer;
-import it.geosolutions.geobatchcoder.composer.PlainComposerOut;
-import it.geosolutions.geobatchcoder.model.Location;
+import it.geosolutions.batchgeocoder.composer.OutputComposer;
+import it.geosolutions.batchgeocoder.composer.PlainComposerOut;
+import it.geosolutions.batchgeocoder.model.Location;
 
+import java.awt.Canvas;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -16,8 +17,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import au.com.bytecode.opencsv.CSVWriter;
-
-import com.geosolutions.batchgeocoder.Canvas;
 
 public class CSVRepositoryWriter implements Output {
 

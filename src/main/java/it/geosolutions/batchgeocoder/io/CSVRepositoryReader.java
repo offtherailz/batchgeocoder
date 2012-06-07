@@ -1,9 +1,9 @@
-package it.geosolutions.geobatchcoder.persistance;
+package it.geosolutions.batchgeocoder.io;
 
-import it.geosolutions.geobatchcoder.model.Description;
-import it.geosolutions.geobatchcoder.model.Location;
-import it.geosolutions.geobatchcoder.model.LocationImpl;
-import it.geosolutions.geobatchcoder.model.Position;
+import it.geosolutions.batchgeocoder.model.Description;
+import it.geosolutions.batchgeocoder.model.Location;
+import it.geosolutions.batchgeocoder.model.LocationImpl;
+import it.geosolutions.batchgeocoder.model.Position;
 
 import java.io.FileReader;
 import java.io.IOException;

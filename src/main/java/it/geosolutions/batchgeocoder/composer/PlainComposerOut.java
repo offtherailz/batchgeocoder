@@ -1,14 +1,16 @@
-package it.geosolutions.geobatchcoder.composer;
+package it.geosolutions.batchgeocoder.composer;
 
-import it.geosolutions.geobatchcoder.model.Location;
+import it.geosolutions.batchgeocoder.model.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import au.com.bytecode.opencsv.CSVWriter;
 
-
-
+/**
+ * Basic composer
+ * @author DamianoG
+ *
+ */
 public class PlainComposerOut implements OutputComposer{
 
 	public List<String[]> composeAll(List<Location> locations) {

@@ -1,4 +1,4 @@
-package it.geosolutions.geobatchcoder.model;
+package it.geosolutions.batchgeocoder.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,11 @@ import java.util.Map;
 
 import fr.dudie.nominatim.model.Address;
 
+/**
+ * Implementation of the data structure for the geographical data representing a location 
+ * @author DamianoG
+ *
+ */
 public class Position {
 
 	

@@ -1,9 +1,14 @@
-package it.geosolutions.geobatchcoder.composer;
+package it.geosolutions.batchgeocoder.composer;
 
-import it.geosolutions.geobatchcoder.model.Location;
+import it.geosolutions.batchgeocoder.model.Location;
 
 import java.util.List;
 
+/**
+ * 
+ * @author DamianoG
+ * Compose the information structure for serialization, persistence...
+ */
 public interface OutputComposer {
 
 	/**

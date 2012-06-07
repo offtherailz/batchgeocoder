@@ -1,9 +1,13 @@
-package it.geosolutions.geobatchcoder.model;
+package it.geosolutions.batchgeocoder.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Implementation of the data structure for the metadata representing a location 
+ * @author DamianoG
+ *
+ */
 public class Description {
 
 	private String[] data;

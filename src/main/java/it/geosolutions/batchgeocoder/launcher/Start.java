@@ -1,7 +1,10 @@
-package it.geosolutions.geobatchcoder.launcher;
+package it.geosolutions.batchgeocoder.launcher;
 
-import it.geosolutions.geobatchcoder.search.SearchEngine;
-
+/**
+ * The entry point for execute bulk translations.
+ * @author DamianoG
+ *
+ */
 public class Start {
 	
 	public static void main (String[] args){

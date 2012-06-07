@@ -1,4 +1,4 @@
-package it.geosolutions.geobatchcoder.persistance;
+package it.geosolutions.batchgeocoder.io;
 
 public enum OutputFileType {
 	GEOCODED,DISCARDED

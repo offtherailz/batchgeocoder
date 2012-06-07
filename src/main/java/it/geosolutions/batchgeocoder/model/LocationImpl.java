@@ -1,4 +1,4 @@
-package it.geosolutions.geobatchcoder.model;
+package it.geosolutions.batchgeocoder.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,22 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 
+/**
+ * 
+ * @author DamianoG
+ * Provide a default implementation for location Object
+ */
 public class LocationImpl implements Location{
 	
 	
 	private Description description;
 	private Position position;
 	
-	public void setDescription(Description description) {
-		this.description = description;
-	}
-	
+	/*
+	 * (non-Javadoc)
+	 * @see it.geosolutions.geobatchcoder.model.Location#getLocationAsList()
+	 */
+	@Override
 	public List<String> getLocationAsList() {
 		List<String> list = new ArrayList<String>();
 		list.add(description.getName());
@@ -26,24 +32,53 @@ public class LocationImpl implements Location{
 		return list;
 	}
 	
-	public void getJTSBoundingBox(){
-		
-		Polygon jtsPoly = buildJTSPolygon();
-//		jtsPoly.
-	}
-
-	public List<String> getPositionsAlternatives() {
+	/*
+	 * (non-Javadoc)
+	 * @see it.geosolutions.geobatchcoder.model.Location#getAlternativeNames()
+	 */
+	@Override
+	public List<String> getAlternativeNames() {
 		return description.getAllAlternatives();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see it.geosolutions.geobatchcoder.model.Location#setPosition(it.geosolutions.geobatchcoder.model.Position)
+	 */
+	@Override
 	public void setPosition(Position position) {
 		this.position = position;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see it.geosolutions.geobatchcoder.model.Location#setDescription(it.geosolutions.geobatchcoder.model.Description)
+	 */
+	@Override
+	public void setDescription(Description description) {
+		this.description = description;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see it.geosolutions.geobatchcoder.model.Location#getName()
+	 */
+	@Override
 	public String getName(){
 		return this.description.getName();
 	}
 	
+	/*
+	 * TODO NOT FINISHED YET
+	 */
+	public Polygon getJTSBoundingBox(){
+		Polygon jtsPoly = buildJTSPolygon();
+		return jtsPoly;
+	}
+	
+	/*
+	 * TODO NOT FINISHED YET
+	 */
 	private Polygon buildJTSPolygon() {
 
 		Map<String, Double> bounds = position.getBoundingBoxPoints();
@@ -64,12 +99,5 @@ public class LocationImpl implements Location{
 		return polygon;
 
 	}
-
-//	public Description getDescription() {
-//		return description;
-//	}
-	
-	
-	
 	
 }

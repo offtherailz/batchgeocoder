@@ -1,6 +1,6 @@
-package it.geosolutions.geobatchcoder.persistance;
+package it.geosolutions.batchgeocoder.io;
 
-import it.geosolutions.geobatchcoder.model.Location;
+import it.geosolutions.batchgeocoder.model.Location;
 
 import java.util.List;
 

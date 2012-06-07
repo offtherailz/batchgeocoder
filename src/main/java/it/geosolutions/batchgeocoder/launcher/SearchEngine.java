@@ -1,11 +1,13 @@
-package it.geosolutions.geobatchcoder.search;
+package it.geosolutions.batchgeocoder.launcher;
 
-import it.geosolutions.geobatchcoder.model.Location;
-import it.geosolutions.geobatchcoder.persistance.CSVRepositoryReader;
-import it.geosolutions.geobatchcoder.persistance.CSVRepositoryWriter;
-import it.geosolutions.geobatchcoder.persistance.Input;
-import it.geosolutions.geobatchcoder.persistance.Output;
-import it.geosolutions.geobatchcoder.persistance.OutputFileType;
+import it.geosolutions.batchgeocoder.geocoder.GeoCoder;
+import it.geosolutions.batchgeocoder.geocoder.NominatimGeocCoder;
+import it.geosolutions.batchgeocoder.io.CSVRepositoryReader;
+import it.geosolutions.batchgeocoder.io.CSVRepositoryWriter;
+import it.geosolutions.batchgeocoder.io.Input;
+import it.geosolutions.batchgeocoder.io.Output;
+import it.geosolutions.batchgeocoder.io.OutputFileType;
+import it.geosolutions.batchgeocoder.model.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +18,19 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+/**
+ * Launch a bulk translation for the data retrieved from a source and produce 2 files: 
+ * One for discarded data (data without any coding) and one for geocodedcoded (or reverse geocoded) data
+ * @author DamianoG
+ *
+ */
 public class SearchEngine {
 
 	private static Logger LOG = Logger.getLogger(SearchEngine.class
 			.getCanonicalName());
 	
 	private Input repo;
-	private Search searcher;
+	private GeoCoder searcher;
 	private Output listGeocoded;
 	private Output outDiscarded;
 	private Configuration conf;
@@ -34,20 +42,25 @@ public class SearchEngine {
 			LOG.log(Level.SEVERE, "failed to load configurations");
 		}
 		repo = new CSVRepositoryReader();
-		searcher = new NominatimSearch(conf.getString("email"));
+		searcher = new NominatimGeocCoder(conf.getString("email"));
 		listGeocoded = new CSVRepositoryWriter(OutputFileType.GEOCODED);
 		outDiscarded = new CSVRepositoryWriter(OutputFileType.DISCARDED);
 		
 	}
 	
+	/*
+	 * TODO GENERALIZE IT FOR GEOCODING AND REVERSEGEOCODING
+	 */
 	public void runSearch(){
-		String email = conf.getString("email");
+		
+		int intervall = conf.getInt("request.intervall");
 		List<Location> geocodedList = new ArrayList<Location>();
 		repo.loadLocations();
 		boolean outcome = false;
 		List<Location> discardedList = new ArrayList<Location>();
+		
 		for(Location el : repo.getLocations()){
-			outcome = searcher.calculateGeoData(el);
+			outcome = searcher.geocode(el);
 			if(!outcome){
 				discardedList.add(el);
 				LOG.info("Discarded " + el.getName());
@@ -58,11 +71,12 @@ public class SearchEngine {
 			}
 			
 			try {
-				Thread.sleep(1300);
+				Thread.sleep(intervall);
 			} catch (InterruptedException e) {
 				new RuntimeException(e);
 			}
 		}
+		
 		listGeocoded.storeLocations(geocodedList);
 		outDiscarded.storeLocations(discardedList);
 		LOG.info("Discarded Number " + discardedList.size());
