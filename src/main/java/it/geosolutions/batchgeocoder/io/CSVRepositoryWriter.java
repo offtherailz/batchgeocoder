@@ -4,7 +4,7 @@ import it.geosolutions.batchgeocoder.composer.OutputComposer;
 import it.geosolutions.batchgeocoder.composer.PlainComposerOut;
 import it.geosolutions.batchgeocoder.model.Location;
 
-import java.awt.Canvas;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -20,7 +20,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 public class CSVRepositoryWriter implements Output {
 
-	private static Logger LOG = Logger.getLogger(Canvas.class.getCanonicalName());
+	private static Logger LOG = Logger.getLogger(CSVRepositoryWriter.class.getCanonicalName());
 	private OutputComposer outComposer;
 	private String outputFileName;
 	

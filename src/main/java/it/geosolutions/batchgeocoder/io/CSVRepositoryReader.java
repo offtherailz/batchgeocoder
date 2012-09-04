@@ -102,7 +102,7 @@ public class CSVRepositoryReader implements Input {
 		Reader fileReader = null;
 		try {
 			fileReader = new FileReader(filename);
-			reader = new CSVReader(fileReader, ';');
+			reader = new CSVReader(fileReader, ',');
 			myEntries = reader.readAll();
 			for(String[] el : myEntries){
 				if (el != null && el.length > 1) {

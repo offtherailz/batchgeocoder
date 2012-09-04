@@ -5,6 +5,7 @@ import it.geosolutions.batchgeocoder.geocoder.NominatimGeocCoder;
 import it.geosolutions.batchgeocoder.io.CSVRepositoryReader;
 import it.geosolutions.batchgeocoder.io.CSVRepositoryWriter;
 import it.geosolutions.batchgeocoder.io.Input;
+import it.geosolutions.batchgeocoder.io.JavaScriptArrayStoreWriter;
 import it.geosolutions.batchgeocoder.io.Output;
 import it.geosolutions.batchgeocoder.io.OutputFileType;
 import it.geosolutions.batchgeocoder.model.Location;
@@ -43,8 +44,8 @@ public class SearchEngine {
 		}
 		repo = new CSVRepositoryReader();
 		searcher = new NominatimGeocCoder(conf.getString("email"));
-		listGeocoded = new CSVRepositoryWriter(OutputFileType.GEOCODED);
-		outDiscarded = new CSVRepositoryWriter(OutputFileType.DISCARDED);
+		listGeocoded = new JavaScriptArrayStoreWriter(OutputFileType.GEOCODED);
+		outDiscarded = new JavaScriptArrayStoreWriter(OutputFileType.DISCARDED);
 		
 	}
 	
